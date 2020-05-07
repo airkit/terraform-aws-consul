@@ -28,6 +28,11 @@ variable "allowed_inbound_cidr_blocks" {
   type        = list(string)
 }
 
+variable "allowed_outbound_cidr_blocks" {
+  description = "A list of CIDR-formatted IP address ranges from which the EC2 Instances will allow connections from Consul"
+  type        = list(string)
+}
+
 variable "user_data" {
   description = "A User Data script to execute while the server is booting. We recommend passing in a bash script that executes the run-consul script, which should have been installed in the Consul AMI by the install-consul module."
   type        = string
