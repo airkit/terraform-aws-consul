@@ -155,12 +155,6 @@ variable "tenancy" {
   default     = null
 }
 
-variable "root_volume_encrypted" {
-  description = "If true, the launched EC2 instance will have volume encryption. Must be configured to perform drift detection."
-  type        = bool
-  default     = false
-}
-
 variable "root_volume_ebs_optimized" {
   description = "If true, the launched EC2 instance will be EBS-optimized."
   type        = bool
@@ -183,6 +177,12 @@ variable "root_volume_delete_on_termination" {
   description = "Whether the volume should be destroyed on instance termination."
   type        = bool
   default     = true
+}
+
+variable "root_volume_encrypted" {
+  description = "Encrypt the root volume at rest"
+  type        = bool
+  default     = false
 }
 
 variable "wait_for_capacity_timeout" {
@@ -245,6 +245,12 @@ variable "http_api_port" {
   default     = 8500
 }
 
+variable "https_api_port" {
+  description = "The port used by clients to talk to the HTTPS API. Only used if enable_https_port is set to true."
+  type        = number
+  default     = 8501
+}
+
 variable "dns_port" {
   description = "The port used to resolve DNS queries."
   type        = number
@@ -275,8 +281,20 @@ variable "enable_iam_setup" {
   default     = true
 }
 
+variable "enable_https_port" {
+  description = "If set to true, allow access to the Consul HTTPS port defined via the https_api_port variable."
+  type        = bool
+  default     = false
+}
+
 variable "iam_instance_profile_name" {
   description = "If enable_iam_setup is false then this will be the name of the IAM instance profile to attach"
+  type        = string
+  default     = null
+}
+
+variable "iam_permissions_boundary" {
+  description = "If set, restricts the created IAM role to the given permissions boundary"
   type        = string
   default     = null
 }
