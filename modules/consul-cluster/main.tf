@@ -1,10 +1,12 @@
 # ----------------------------------------------------------------------------------------------------------------------
 # REQUIRE A SPECIFIC TERRAFORM VERSION OR HIGHER
-# This module has been updated with 0.12 syntax, which means it is no longer compatible with any versions below 0.12.
 # ----------------------------------------------------------------------------------------------------------------------
 
 terraform {
-  required_version = ">= 0.12"
+  # This module is now only being tested with Terraform 0.14.x. However, to make upgrading easier, we are setting
+  # 0.12.26 as the minimum version, as that version added support for required_providers with source URLs, making it
+  # forwards compatible with 0.14.x code.
+  required_version = ">= 0.12.26"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -202,7 +204,10 @@ module "security_group_rules" {
   serf_lan_port   = var.serf_lan_port
   serf_wan_port   = var.serf_wan_port
   http_api_port   = var.http_api_port
+  https_api_port  = var.https_api_port
   dns_port        = var.dns_port
+
+  enable_https_port = var.enable_https_port
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -231,6 +236,8 @@ resource "aws_iam_role" "instance_role" {
 
   name_prefix        = var.cluster_name
   assume_role_policy = data.aws_iam_policy_document.instance_role.json
+
+  permissions_boundary = var.iam_permissions_boundary
 
   # aws_iam_instance_profile.instance_profile in this module sets create_before_destroy to true, which means
   # everything it depends on, including this resource, must set it as well, or you'll get cyclic dependency errors
