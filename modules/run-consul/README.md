@@ -73,6 +73,7 @@ The `run-consul` script accepts the following arguments:
   relative to the `run-consul` script itself.
 * `systemd-stdout` (optional): The StandardOutput option of the systemd unit. If not specified, it will use systemd's default (journal).
 * `systemd-stderr` (optional): The StandardError option of the systemd unit. If not specified, it will use systemd's default (inherit).
+* `log-json` (optional): This flag enables the agent to output logs in a JSON format. Defaults to false.
 * `user` (optional): The user to run Consul as. Default is to use the owner of `config-dir`.
 * `enable-gossip-encryption` (optional): Enable encryption of gossip traffic between nodes. If set, you must also specify `gossip-encryption-key`.
 * `gossip-encryption-key` (optional): The key to use for encrypting gossip traffic. Must be specified with `enable-gossip-encryption`.

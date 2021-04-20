@@ -41,6 +41,7 @@ function print_usage {
   echo -e "  --data-dir\t\tThe path to the Consul data folder. Optional. Default is the absolute path of '../data', relative to this script."
   echo -e "  --systemd-stdout\t\tThe StandardOutput option of the systemd unit.  Optional.  If not configured, uses systemd's default (journal)."
   echo -e "  --systemd-stderr\t\tThe StandardError option of the systemd unit.  Optional.  If not configured, uses systemd's default (inherit)."
+  echo -e "  --log-json\t\tThis flag enables the agent to output logs in a JSON format.  Optional.  Defaults to false."
   echo -e "  --bin-dir\t\tThe path to the folder with Consul binary. Optional. Default is the absolute path of the parent folder of this script."
   echo -e "  --user\t\tThe user to run Consul as. Optional. Default is to use the owner of --config-dir."
   echo -e "  --enable-gossip-encryption\t\tEnable encryption of gossip traffic between nodes. Optional. Must also specify --gossip-encryption-key."
@@ -232,8 +233,9 @@ function generate_consul_config {
   local -r disable_upgrade_migration="${19}"
   local -r upgrade_version_tag=${20}
   local -r config_path="$config_dir/$CONSUL_CONFIG_FILE"
+  local -r log_json="${21}"
 
-  shift 20
+  shift 21
   local -r recursors=("$@")
 
   local instance_id=""
@@ -312,6 +314,15 @@ EOF
 )
   fi
 
+  local logging_configuration
+  if [[ "$log_json" == "true" ]]; then
+    log_info "Adding log_json to logging configuration"
+    logging_configuration=$(cat <<EOF
+"log_json": true,
+EOF
+)
+  fi
+
   log_info "Creating default Consul configuration"
   local default_config_json
   default_config_json=$(cat <<EOF
@@ -328,6 +339,7 @@ EOF
   $gossip_encryption_configuration
   $rpc_encryption_configuration
   $autopilot_configuration
+  $logging_configuration
   "telemetry": {
     "disable_compat_1.9": true
   },
@@ -439,6 +451,7 @@ function run {
   local key_file_path=""
   local environment=()
   local skip_consul_config="false"
+  local log_json=""
   local recursors=()
   local cleanup_dead_servers="$DEFAULT_AUTOPILOT_CLEANUP_DEAD_SERVERS"
   local last_contact_threshold="$DEFAULT_AUTOPILOT_LAST_CONTACT_THRESHOLD"
@@ -573,6 +586,9 @@ function run {
       --skip-consul-config)
         skip_consul_config="true"
         ;;
+      --log-json)
+        log_json="true"
+        ;;
       --recursor)
         assert_not_empty "$key" "$2"
         recursors+=("$2")
@@ -656,6 +672,7 @@ function run {
       "$redundancy_zone_tag" \
       "$disable_upgrade_migration" \
       "$upgrade_version_tag" \
+      "$log_json" \
       "${recursors[@]}"
   fi
 
