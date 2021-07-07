@@ -15,8 +15,8 @@ terraform {
 resource "aws_security_group_rule" "allow_tcp_inbound" {
   count       = length(var.allowed_inbound_cidr_blocks) >= 1 ? 1 : 0
   type        = "ingress"
-  from_port   = min([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port])
-  to_port     = max([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port])
+  from_port   = min([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port]...)
+  to_port     = max([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port]...)
   protocol    = "tcp"
   cidr_blocks = distinct(var.allowed_inbound_cidr_blocks)
 
@@ -26,8 +26,8 @@ resource "aws_security_group_rule" "allow_tcp_inbound" {
 resource "aws_security_group_rule" "allow_udp_inbound" {
   count       = length(var.allowed_inbound_cidr_blocks) >= 1 ? 1 : 0
   type        = "ingress"
-  from_port   = min([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port])
-  to_port     = max([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port])
+  from_port   = min([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port]...)
+  to_port     = max([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port]...)
   protocol    = "udp"
   cidr_blocks = distinct(var.allowed_inbound_cidr_blocks)
 
@@ -37,8 +37,8 @@ resource "aws_security_group_rule" "allow_udp_inbound" {
 resource "aws_security_group_rule" "allow_tcp_inbound_from_security_group_ids" {
   count                    = var.allowed_inbound_security_group_count
   type                     = "ingress"
-  from_port   = min([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port])
-  to_port     = max([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port])
+  from_port   = min([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port]...)
+  to_port     = max([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port]...)
   protocol                 = "tcp"
   source_security_group_id = element(var.allowed_inbound_security_group_ids, count.index)
 
@@ -48,8 +48,8 @@ resource "aws_security_group_rule" "allow_tcp_inbound_from_security_group_ids" {
 resource "aws_security_group_rule" "allow_udp_inbound_from_security_group_ids" {
   count                    = var.allowed_inbound_security_group_count
   type                     = "ingress"
-  from_port   = min([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port])
-  to_port     = max([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port])
+  from_port   = min([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port]...)
+  to_port     = max([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port]...)
   protocol                 = "udp"
   source_security_group_id = element(var.allowed_inbound_security_group_ids, count.index)
 
@@ -60,8 +60,8 @@ resource "aws_security_group_rule" "allow_udp_inbound_from_security_group_ids" {
 
 resource "aws_security_group_rule" "allow_tcp_inbound_from_self" {
   type      = "ingress"
-  from_port   = min([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port])
-  to_port     = max([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port])
+  from_port   = min([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port]...)
+  to_port     = max([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port]...)
   protocol  = "tcp"
   self      = true
 
@@ -70,8 +70,8 @@ resource "aws_security_group_rule" "allow_tcp_inbound_from_self" {
 
 resource "aws_security_group_rule" "allow_udp_inbound_from_self" {
   type      = "ingress"
-  from_port   = min([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port])
-  to_port     = max([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port])
+  from_port   = min([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port]...)
+  to_port     = max([var.server_rpc_port,var.serf_lan_port,var.serf_wan_port,var.cli_rpc_port,var.http_api_port,var.https_api_port,var.dns_port]...)
   protocol  = "udp"
   self      = true
 
